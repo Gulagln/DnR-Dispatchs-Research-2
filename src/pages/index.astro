@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Masthead from '../components/Masthead.astro';
+import BriefRow from '../components/BriefRow.astro';
+import EssayCard from '../components/EssayCard.astro';
+import EmailCapture from '../components/EmailCapture.astro';
+import { SITE } from '../site.config';
+import { getCollection } from 'astro:content';
+
+const all = await getCollection('articles');
+const sorted = all.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const briefs = sorted.filter((e) => e.data.format === 'brief').slice(0, 7);
+const essays = sorted.filter((e) => e.data.format === 'essay');
+---
+<BaseLayout title={SITE.title}>
+  <Masthead />
+  <div class="shell">
+    <section aria-labelledby="the-brief">
+      <div class="section-label">
+        <span class="section-label__text" id="the-brief">The Brief</span>
+        <span class="section-label__rule"></span>
+        <span class="section-label__meta">{briefs.length} dispatches</span>
+      </div>
+      <div class="brief-list">
+        {briefs.map((entry) => <BriefRow entry={entry} />)}
+      </div>
+    </section>
+
+    <section aria-labelledby="deep-reads">
+      <div class="section-label">
+        <span class="section-label__text" id="deep-reads">Strategy &amp; Deep Reads</span>
+        <span class="section-label__rule"></span>
+      </div>
+      <div class="essay-list">
+        {essays.map((entry) => <EssayCard entry={entry} />)}
+      </div>
+    </section>
+
+    <EmailCapture />
+  </div>
+</BaseLayout>

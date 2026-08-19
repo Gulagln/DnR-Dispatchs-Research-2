@@ -1,0 +1,14 @@
+---
+import CompassMark from './CompassMark.astro';
+import { SITE } from '../site.config';
+---
+<header class="masthead">
+  <div class="masthead__mark">
+    <CompassMark size={56} />
+  </div>
+  <h1 class="masthead__wordmark">
+    <a href="/">Dn<em>R</em></a>
+  </h1>
+  <p class="masthead__subtitle">{SITE.subtitle}</p>
+  <p class="masthead__tagline">{SITE.tagline}</p>
+</header>

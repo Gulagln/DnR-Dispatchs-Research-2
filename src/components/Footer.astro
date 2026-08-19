@@ -1,0 +1,37 @@
+---
+import { SECTIONS, SITE } from '../site.config';
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="shell">
+    <div class="site-footer__grid">
+      <div>
+        <p class="site-footer__heading">Sections</p>
+        <ul>
+          {SECTIONS.map((s) => (
+            <li><a href={`/${s.slug}/`}>{s.label}</a></li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <p class="site-footer__heading">Desk</p>
+        <ul>
+          <li><a href="/about/">About</a></li>
+          <li><a href={`https://buttondown.com/${SITE.buttondownUsername}`}>The Brief (email)</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="site-footer__heading">Legal</p>
+        <ul>
+          <li><a href="/disclaimer/">Disclaimer</a></li>
+          <li><a href="/terms/">Terms of Use</a></li>
+          <li><a href="/privacy/">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="site-footer__bottom">
+      <span>© {year} {SITE.title}</span>
+      <span>{SITE.tagline}</span>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,18 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'articles'>;
+}
+const { entry } = Astro.props;
+const { title, section, dateline, tier } = entry.data;
+---
+<article class="brief-row">
+  <div class="brief-row__dateline">{dateline}</div>
+  <div class="brief-row__body">
+    <h3>
+      <a href={`/${section}/${entry.slug}/`}>{title}</a>
+      {tier === 'premium' && <span class="brief-row__tag">Premium</span>}
+    </h3>
+  </div>
+</article>

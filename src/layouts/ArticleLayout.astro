@@ -1,0 +1,32 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import CompassMark from '../components/CompassMark.astro';
+import { sectionLabel } from '../site.config';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'articles'>;
+}
+const { entry } = Astro.props;
+const { title, section, author, dateline, tier, excerpt } = entry.data;
+---
+<BaseLayout title={title} description={excerpt}>
+  <div class="shell">
+    <header class="article-header">
+      <p class="article-header__section">
+        <CompassMark size={16} />
+        {sectionLabel(section)}
+        {tier === 'premium' && <span class="tag-premium">Premium</span>}
+      </p>
+      <h1>{title}</h1>
+      <p class="article-header__byline"><strong>{author}</strong> · {dateline}</p>
+    </header>
+    <div class="prose">
+      <slot />
+      <p class="disclaimer-strip">
+        This article is educational and general market commentary, not personalized financial advice
+        or a recommendation to buy or sell any security. See our <a href="/disclaimer/" class="underline-link">disclaimer</a>.
+      </p>
+    </div>
+  </div>
+</BaseLayout>

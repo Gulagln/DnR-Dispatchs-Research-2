@@ -1,0 +1,68 @@
+---
+import TopBar from '../components/TopBar.astro';
+import Footer from '../components/Footer.astro';
+import { SITE } from '../site.config';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description = SITE.description } = Astro.props;
+const pageTitle = title === SITE.title ? title : `${title} — ${SITE.title}`;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>document.documentElement.classList.add('js');</script>
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(Astro.url.pathname, SITE.url).toString()} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.title} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL('/og-image.png', SITE.url).toString()} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={new URL('/og-image.png', SITE.url).toString()} />
+
+    <!--
+      Cloudflare Web Analytics: enable it from the Pages project dashboard
+      (Analytics & Logs → Web Analytics) — Cloudflare injects the beacon
+      automatically for the domain, no token/script needed here. If you'd
+      rather add it manually, paste the snippet Cloudflare gives you below.
+    -->
+  </head>
+  <body>
+    <div class="instrument-frame"><span></span></div>
+    <TopBar />
+    <slot />
+    <Footer />
+
+    <script>
+      const revealEls = document.querySelectorAll('.brief-row, .essay-card');
+      if ('IntersectionObserver' in window && revealEls.length) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                io.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+        );
+        revealEls.forEach((el) => io.observe(el));
+      } else {
+        revealEls.forEach((el) => el.classList.add('is-visible'));
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BriefRow from '../../components/BriefRow.astro';
+import EssayCard from '../../components/EssayCard.astro';
+import { getCollection } from 'astro:content';
+
+const entries = (await getCollection('articles', (e) => e.data.section === 'strategy-notes')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+const briefs = entries.filter((e) => e.data.format === 'brief');
+const essays = entries.filter((e) => e.data.format === 'essay');
+---
+<BaseLayout title="Strategy Notes" description="Long-form strategy essays from DnR Dispatch Research.">
+  <div class="shell">
+    <header class="page-header">
+      <p class="page-header__eyebrow">Section</p>
+      <h1>Strategy Notes</h1>
+    </header>
+
+    {briefs.length > 0 && (
+      <div class="brief-list">
+        {briefs.map((entry) => <BriefRow entry={entry} />)}
+      </div>
+    )}
+    {essays.length > 0 && (
+      <div class="essay-list">
+        {essays.map((entry) => <EssayCard entry={entry} />)}
+      </div>
+    )}
+    {entries.length === 0 && <p class="static-prose">Nothing filed in this section yet.</p>}
+  </div>
+</BaseLayout>

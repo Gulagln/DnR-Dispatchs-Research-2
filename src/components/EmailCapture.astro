@@ -1,0 +1,19 @@
+---
+import { SITE } from '../site.config';
+---
+<section class="capture" id="subscribe">
+  <p class="capture__label">The Brief, by email</p>
+  <h2>Get dispatches as they publish</h2>
+  <p>Short-form market and macro dispatches, delivered as they're filed. No spam, unsubscribe any time.</p>
+  <form
+    action={`https://buttondown.com/api/emails/embed-subscribe/${SITE.buttondownUsername}`}
+    method="post"
+    target="popupwindow"
+    onsubmit={`window.open('https://buttondown.com/${SITE.buttondownUsername}', 'popupwindow')`}
+  >
+    <label for="bd-email">Email address</label>
+    <input class="field" id="bd-email" type="email" name="email" placeholder="you@email.com" required />
+    <input type="hidden" value="1" name="embed" />
+    <button class="btn" type="submit">Subscribe</button>
+  </form>
+</section>

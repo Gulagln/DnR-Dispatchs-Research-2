@@ -1,0 +1,90 @@
+---
+import { SECTIONS } from '../site.config';
+import CompassMark from './CompassMark.astro';
+
+const path = Astro.url.pathname;
+const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+<div class="topbar">
+  <div class="topbar__row">
+    <a href="/" class="topbar__brand">
+      <CompassMark size={22} />
+      <span>DnR</span>
+    </a>
+
+    <div class="topbar__right">
+      <nav class="topbar__nav" aria-label="Sections">
+        {SECTIONS.map((s) => (
+          <a href={`/${s.slug}/`} aria-current={isCurrent(`/${s.slug}`) ? 'page' : undefined}>
+            {s.label}
+          </a>
+        ))}
+        <a href="/about/" aria-current={isCurrent('/about') ? 'page' : undefined}>About</a>
+      </nav>
+
+      <button
+        type="button"
+        class="topbar__toggle"
+        id="drawer-toggle"
+        aria-expanded="false"
+        aria-controls="mobile-drawer"
+        aria-label="Open menu"
+      >
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="drawer" id="mobile-drawer" data-state="closed">
+  <div class="drawer__backdrop" data-drawer-close tabindex="-1"></div>
+  <nav class="drawer__panel" aria-label="Mobile menu">
+    <div class="drawer__head">
+      <a href="/" class="topbar__brand">
+        <CompassMark size={20} />
+        <span>DnR</span>
+      </a>
+      <button type="button" class="drawer__close" data-drawer-close aria-label="Close menu">✕</button>
+    </div>
+    <ul class="drawer__list">
+      <li><a href="/" aria-current={path === '/' ? 'page' : undefined}>Home</a></li>
+      {SECTIONS.map((s) => (
+        <li>
+          <a href={`/${s.slug}/`} aria-current={isCurrent(`/${s.slug}`) ? 'page' : undefined}>
+            {s.label}
+          </a>
+        </li>
+      ))}
+      <li><a href="/about/" aria-current={isCurrent('/about') ? 'page' : undefined}>About</a></li>
+    </ul>
+    <a href="/#subscribe" class="btn drawer__cta" data-drawer-close>Get The Brief</a>
+  </nav>
+</div>
+
+<script>
+  const toggle = document.getElementById('drawer-toggle');
+  const drawer = document.getElementById('mobile-drawer');
+
+  function openDrawer() {
+    if (!drawer || !toggle) return;
+    drawer.dataset.state = 'open';
+    toggle.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer() {
+    if (!drawer || !toggle) return;
+    drawer.dataset.state = 'closed';
+    toggle.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  toggle?.addEventListener('click', () => {
+    drawer?.dataset.state === 'open' ? closeDrawer() : openDrawer();
+  });
+  drawer?.querySelectorAll('[data-drawer-close]').forEach((el) => {
+    el.addEventListener('click', closeDrawer);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeDrawer();
+  });
+</script>

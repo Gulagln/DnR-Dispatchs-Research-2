@@ -1,0 +1,25 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { sectionLabel } from '../site.config';
+
+interface Props {
+  entry: CollectionEntry<'articles'>;
+}
+const { entry } = Astro.props;
+const { title, section, author, excerpt, date, tier } = entry.data;
+const formattedDate = date.toLocaleDateString('en-US', {
+  month: 'short',
+  day: '2-digit',
+  year: 'numeric',
+});
+---
+<article class="essay-card">
+  <div class="essay-card__meta">
+    <span>{sectionLabel(section)}</span>
+    <span>·</span>
+    <span>{formattedDate}</span>
+    {tier === 'premium' && <span class="tag-premium">Premium</span>}
+  </div>
+  <h3><a href={`/${section}/${entry.slug}/`}>{title}</a></h3>
+  <p>{excerpt}</p>
+</article>
